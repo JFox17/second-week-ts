@@ -77,3 +77,43 @@ const posts: Record<Post, string>[] = [
  };
 
  console.log(normalizeData(posts));
+
+ //ex 3
+interface User {
+   postId: number,
+   id: number,
+   name: string,
+   email: string,
+   body: string
+}
+interface ShortUser {
+   id: number,
+   email: string,
+}
+
+const COMMENTS_URL: string = 'https://jsonplaceholder.typicode.com/comments';
+
+const getData = async (url: string): Promise<User[]> => {
+   let response = await fetch(url);
+   let users: User[] = await response.json();
+
+  return users
+}
+
+function filterData(data:User[]): ShortUser[] {
+   return data.reduce((acc, user) => {
+      return  [...acc, { id: user.id, email: user.email }]
+   }, [] as ShortUser[])
+}
+function showShortData(data:User[]): void {
+   data.forEach((item) => {
+      console.log(`ID:${item.id}, Email: ${item.email}`)
+    });
+}
+
+getData(COMMENTS_URL)
+  .then(data => {
+   showShortData(data)
+   //or
+   // console.log(filterData(data))
+});

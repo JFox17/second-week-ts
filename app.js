@@ -53,23 +53,27 @@ const normalizeData = (unnormalizedData) => {
     const allIds = unnormalizedData.reduce((acc, obj) => {
         return [...acc, obj.id];
     }, []);
-    console.log(allIds);
-    const data = {
-        byId,
-        allIds
-    };
-    return data;
+    return { byId, allIds };
     // Your code here...
 };
-//  normalizeData(posts)
-console.log(normalizeData(posts));
-/**
- * {
- *    byId: {
- *      62e69d5a5458aac0ed320b35: { id: '...', title: '...', body: '...' },
- *      62e69d5a5458aac0ed320b1c: { id: '...', title: '...', body: '...' },
- *      ...
- *    },
- *    allIds: ['62e69d5a5458aac0ed320b35', '62e69d5a5458aac0ed320b1c', ...]
- * }
- */ 
+const COMMENTS_URL = 'https://jsonplaceholder.typicode.com/comments';
+const getData = async (url) => {
+    let response = await fetch(url);
+    let users = await response.json();
+    return users;
+};
+function filterData(data) {
+    return data.reduce((acc, user) => {
+        return [...acc, { id: user.id, email: user.email }];
+    }, []);
+}
+function showShortData(data) {
+    data.forEach((item) => {
+        console.log(`ID:${item.id}, Email: ${item.email}`);
+    });
+}
+getData(COMMENTS_URL)
+    .then(data => {
+    // console.log(filterData(data))
+    showShortData(data);
+});
